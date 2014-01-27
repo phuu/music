@@ -1,0 +1,16 @@
+{
+  "name": "music",
+  "version": "0.0.0",
+  "description": "Making music with code.",
+  "main": " ",
+  "dependencies": {
+    "baudio": "~1.1.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "",
+  "author": "",
+  "license": "BSD"
+}
