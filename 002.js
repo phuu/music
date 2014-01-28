@@ -45,17 +45,50 @@ var wbltn = [
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
+    0, 0, 0, 0,
+    intvl.x, intvl.x, intvl.x, intvl.x,
+    intvl.x, intvl.x, intvl.x, intvl.x,
+    intvl.x, intvl.x, intvl.x, intvl.x,
+    intvl.x, intvl.x, intvl.x, intvl.x,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.fourth, 1/intvl.fourth, 1/intvl.fourth, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
     intvl.min.seventh, intvl.tmp.fifth, intvl.min.third, intvl.tone,
+
     intvl.x, intvl.x, intvl.x, intvl.x,
     intvl.x, intvl.x, intvl.x, intvl.x,
     intvl.x, intvl.x, intvl.x, intvl.x,
     intvl.x, intvl.x, intvl.x, intvl.x,
     intvl.tmp.fifth, intvl.tmp.fifth, intvl.tmp.fifth, intvl.tmp.fifth,
     intvl.tmp.fifth, intvl.tmp.fifth, intvl.tmp.fifth, intvl.tmp.fifth,
-    intvl.aug.fourth, intvl.aug.fourth, intvl.aug.fourth, intvl.aug.fourth,
-    intvl.aug.fourth, intvl.aug.fourth, intvl.aug.fourth, intvl.aug.fourth,
-    intvl.fourth, intvl.fourth, intvl.fourth, 0,
+    intvl.min.seventh, intvl.min.seventh, intvl.min.seventh, intvl.min.seventh,
+    intvl.min.seventh, intvl.min.seventh, intvl.min.seventh, intvl.min.seventh,
     intvl.oct, 0, intvl.oct, 0,
+    intvl.oct, 0, intvl.oct, 0,
+    intvl.oct, 0, intvl.oct, 0,
+    intvl.oct, 0, intvl.oct, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    0, 0, 0, 0,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth, 1/intvl.tmp.fifth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth, 1/intvl.aug.fourth,
+    1/intvl.fourth, 1/intvl.fourth, 1/intvl.fourth, 0,
+    0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
@@ -67,7 +100,8 @@ var wbltn = [
 var wobbler = anna({
     vol: 0.5,
     osc: [
-        { fn: sin, vol: 0.5, oct: 1/2 },
+        { fn: sin, vol: 0.8, oct: 1/2 },
+        { fn: sin, vol: 0.3, oct: 1 },
         { fn: sqr, vol: 0.02 },
         { fn: sqr, vol: 0.01, detune: 4 },
         { fn: sqr, vol: 0.01, detune: -5 },
@@ -87,10 +121,24 @@ var lead = anna({
 });
 
 var b = baudio(function (t) {
+
+    var la = lead(t, 220 * wbltn[flr(t * 16 % wbltn.length)]);
+    var wa = wobbler(t, 220 * wbltn[flr(t * 16 % wbltn.length)]);
     return (
-        + lead(t, 220 * wbltn[flr(t * 16 % wbltn.length)])
-        + wobbler(t, 220 * wbltn[flr(t * 16 % wbltn.length)])
+        + wa
+        // + la
         // + (isaw(t, 2) * sin(t % 1, 4 * (1 - (t % 1)) * 55) * sqr(t, 2)) * 0.4
+        +   (
+                + kick(t, 4, 8, 55) * 0.2
+                + kick(t, 4, 8, 100) * 0.3
+                + kick(t, 4, 8, 110) * 0.3
+                + kick(t, 4, 8, 300) * 0.01
+                + kick(t, 4, 8, 301) * 0.01
+                + kick(t, 4, 8, 305) * 0.01
+                // + kick(t, 4, 8, Math.random()) * 0.01
+                // * (t * 8 % 4 < 1 ? 1 : 0)
+            ) * 0.5
+        + kick(t, 4, 1, Math.random()) * 0.01
     ) / 2;
 });
 b.play();
@@ -116,6 +164,10 @@ function anna(opts) {
         }
         return amp * opts.vol;
     }
+}
+
+function kick(t, speed, space, freq) {
+    return Math.sin(freq * 1/(t * speed % (16 / space) + 0.2));
 }
 
 function sin(t, x) {
@@ -151,4 +203,17 @@ function igate(exp) {
 
 function pow(x) {
     return Math.pow(2, x);
+}
+
+function pos(x) {
+    return Math.sqrt(Math.pow(x, 2));
+}
+
+function neg(x) {
+    return -pos(x);
+}
+
+// make x's sign match y's
+function sign(x, y) {
+    return (y > 0 ? pos(x) : neg(x));
 }
