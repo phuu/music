@@ -124,22 +124,23 @@ var b = baudio(function (t) {
 
     var la = lead(t, 220 * wbltn[flr(t * 16 % wbltn.length)]);
     var wa = wobbler(t, 220 * wbltn[flr(t * 16 % wbltn.length)]);
-    return (
-        + wa
+    return Math.max(-1, Math.min(1, (
+        - wa * 2
+        - la
         // + la
         // + (isaw(t, 2) * sin(t % 1, 4 * (1 - (t % 1)) * 55) * sqr(t, 2)) * 0.4
-        +   (
-                + kick(t, 4, 8, 55) * 0.2
-                + kick(t, 4, 8, 100) * 0.3
-                + kick(t, 4, 8, 110) * 0.3
-                + kick(t, 4, 8, 300) * 0.01
-                + kick(t, 4, 8, 301) * 0.01
-                + kick(t, 4, 8, 305) * 0.01
+        -   (
+                - kick(t, 4, 8, 55) * 0.2
+                - kick(t, 4, 8, 100) * 0.3
+                - kick(t, 4, 8, 110) * 0.3
+                - kick(t, 4, 8, 300) * 0.01
+                - kick(t, 4, 8, 301) * 0.01
+                - kick(t, 4, 8, 305) * 0.01
                 // + kick(t, 4, 8, Math.random()) * 0.01
                 // * (t * 8 % 4 < 1 ? 1 : 0)
-            ) * 0.5
-        + kick(t, 4, 1, Math.random()) * 0.01
-    ) / 2;
+            ) * 0.1
+        - kick(t, 4, 1, Math.random()) * 0.001
+    )));
 });
 b.play();
 
@@ -156,7 +157,7 @@ function anna(opts) {
         var i = 0;
         while (i < opts.osc.length) {
             var osc = opts.osc[i];
-            amp += osc.fn(
+            amp -= osc.fn(
                 t,
                 (pitch * osc.oct) * osc.interval + osc.detune
             ) * osc.vol;
